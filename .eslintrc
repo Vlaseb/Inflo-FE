@@ -1,0 +1,4 @@
+{
+    "extends": ["plugin:prettier/recommended"],
+    "plugins": ["react", "react-native"]
+}
