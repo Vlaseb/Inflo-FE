@@ -1,35 +1,35 @@
-import { View, Text, Image } from 'react-native';
-import { useState } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { ScrollView } from 'react-native-gesture-handler';
+import { View, Text, Image } from "react-native";
+import { useState } from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { ScrollView } from "react-native-gesture-handler";
 
-import { images } from '@/constants';
-import FormField from '@/components/FormField';
-import CustomButton from '@/components/CustomButton';
-import { Link, router } from 'expo-router';
+import { images } from "@/constants";
+import FormField from "@/components/FormField";
+import CustomButton from "@/components/CustomButton";
+import { Link, router } from "expo-router";
 
 const SignIn = () => {
     const [form, setForm] = useState({
-        email: '',
-        password: ''
+        email: "",
+        password: ""
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const submit = () => {
-        router.replace('/home');
+        router.replace("/home");
     };
 
     return (
-        <SafeAreaView className="bg-primary h-full">
+        <SafeAreaView className="flex-1 bg-background">
             <ScrollView>
-                <View className="w-full justify-center min-h-[85vh] px-4 my-6">
+                <View className="my-6 min-h-[85vh] w-full justify-center px-4">
                     <Image
                         source={images.fo_blue}
                         resizeMode="contain"
-                        className="w-[115px] h-[100px]"
+                        className="h-[100px] w-[115px]"
                     />
 
-                    <Text className="text-2xl text-black text-semibold mt-10 font-psemibold">
+                    <Text className="text-semibold mt-10 font-psemibold text-2xl text-black">
                         Log in to Inflo
                     </Text>
 
@@ -58,13 +58,13 @@ const SignIn = () => {
                         isLoading={isSubmitting}
                     />
 
-                    <View className="justify-center pt-5 flex-row gap-2">
-                        <Text className="text-lg text-gray-100 font-pregular">
+                    <View className="flex-row justify-center gap-2 pt-5">
+                        <Text className="font-pregular text-lg text-gray-100">
                             Don't have an account?
                         </Text>
                         <Link
                             href="/sign-up"
-                            className="text-lg font-psemibold text-secondary"
+                            className="font-psemibold text-lg text-secondary"
                         >
                             Sign Up
                         </Link>
