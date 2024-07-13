@@ -13,6 +13,7 @@ import { useColorScheme } from "@/hooks/useColorScheme";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Platform } from "react-native";
 import "@/global.css";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const LIGHT_THEME: Theme = {
     dark: false,
@@ -30,6 +31,8 @@ export {
 
 // Prevent the splash screen from auto-hiding before getting the color scheme.
 SplashScreen.preventAutoHideAsync();
+
+const queryClient = new QueryClient();
 
 const RootLayout = () => {
     const { colorScheme, setColorScheme, isDarkColorScheme } = useColorScheme();
@@ -87,26 +90,30 @@ const RootLayout = () => {
     NavigationBar.setBackgroundColorAsync("#ffffff01");
 
     return (
-        <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
+        <QueryClientProvider client={queryClient}>
             <GlobalProvider>
-                <GestureHandlerRootView style={{ flex: 1 }}>
-                    <Stack>
-                        <Stack.Screen
-                            name="index"
-                            options={{ headerShown: false }}
-                        />
-                        <Stack.Screen
-                            name="(auth)"
-                            options={{ headerShown: false }}
-                        />
-                        <Stack.Screen
-                            name="(tabs)"
-                            options={{ headerShown: false }}
-                        />
-                    </Stack>
-                </GestureHandlerRootView>
+                <ThemeProvider
+                    value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}
+                >
+                    <GestureHandlerRootView style={{ flex: 1 }}>
+                        <Stack>
+                            <Stack.Screen
+                                name="index"
+                                options={{ headerShown: false }}
+                            />
+                            <Stack.Screen
+                                name="(auth)"
+                                options={{ headerShown: false }}
+                            />
+                            <Stack.Screen
+                                name="(tabs)"
+                                options={{ headerShown: false }}
+                            />
+                        </Stack>
+                    </GestureHandlerRootView>
+                </ThemeProvider>
             </GlobalProvider>
-        </ThemeProvider>
+        </QueryClientProvider>
     );
 };
 

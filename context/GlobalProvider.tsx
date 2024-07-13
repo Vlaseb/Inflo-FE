@@ -6,7 +6,7 @@ import React, {
     Dispatch,
     SetStateAction,
     ReactNode
-} from 'react';
+} from "react";
 
 // Maybe move these into types
 interface User {}
