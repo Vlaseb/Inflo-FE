@@ -5,7 +5,7 @@
         "version": "1.0.0",
         "orientation": "portrait",
         "icon": "./assets/images/fo.png",
-        "scheme": "myapp",
+        "scheme": "inflo",
         "userInterfaceStyle": "automatic",
         "splash": {
             "image": "./assets/splash.png",
@@ -14,14 +14,14 @@
         },
         "ios": {
             "supportsTablet": true,
-            "bundleIdentifier": "com.anonymous.Inflo"
+            "bundleIdentifier": "com.anonymous.inflo"
         },
         "android": {
             "adaptiveIcon": {
                 "foregroundImage": "./assets/adaptive-icon.png",
                 "backgroundColor": "#ffffff"
             },
-            "package": "com.anonymous.Inflo"
+            "package": "com.anonymous.inflo"
         },
         "web": {
             "bundler": "metro",
