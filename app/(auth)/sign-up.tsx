@@ -3,11 +3,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { ScrollView } from "react-native-gesture-handler";
 import { Link, router } from "expo-router";
 import { useForm } from "react-hook-form";
-import {
-    signInDefaultValues,
-    signInFormSchema,
-    signInFormType
-} from "@/schemas/sign-in";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
     Form,
@@ -22,20 +17,25 @@ import { signUp } from "@/actions/auth";
 import { useState } from "react";
 import { Loader } from "@/components/Loader";
 import { ErrorAlert } from "@/components/ErrorAlert";
+import {
+    signUpDefaultValues,
+    signUpFormSchema,
+    signUpFormType
+} from "@/schemas/sign-up";
 const logoBlue = require("@/assets/images/fo-blue.png");
 
 const SignUp = () => {
     const [error, setError] = useState<string | null>(null);
-    const form = useForm<signInFormType>({
-        resolver: zodResolver(signInFormSchema),
-        defaultValues: signInDefaultValues
+    const form = useForm<signUpFormType>({
+        resolver: zodResolver(signUpFormSchema),
+        defaultValues: signUpDefaultValues
     });
 
     const { mutateAsync, isPending } = useMutation({
         mutationFn: signUp
     });
 
-    const onSubmit = async (values: signInFormType) => {
+    const onSubmit = async (values: signUpFormType) => {
         const data = await mutateAsync(values);
         if (data.error) {
             setError(data.error);
@@ -45,8 +45,8 @@ const SignUp = () => {
     };
 
     return (
-        <SafeAreaView className="h-full bg-background" style={{ flex: 1 }}>
-            <ScrollView className="px-4 pt-16">
+        <SafeAreaView className="bg-background" style={{ flex: 1 }}>
+            <ScrollView contentContainerClassName="px-4 py-16">
                 <Image
                     source={logoBlue}
                     resizeMode="contain"
@@ -59,11 +59,33 @@ const SignUp = () => {
                 {error && <ErrorAlert errorMessage={error} />}
 
                 <Form {...form}>
-                    <KeyboardAvoidingView
-                        enabled
-                        behavior="padding"
-                        className="gap-6"
-                    >
+                    <KeyboardAvoidingView behavior="padding" className="gap-6">
+                        <FormField
+                            control={form.control}
+                            name="first_name"
+                            render={({ field }) => (
+                                <FormInput
+                                    label="First Name"
+                                    placeholder="John"
+                                    autoCapitalize="none"
+                                    autoComplete="name"
+                                    {...field}
+                                />
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="last_name"
+                            render={({ field }) => (
+                                <FormInput
+                                    label="Last Name"
+                                    placeholder="Doe"
+                                    autoCapitalize="none"
+                                    autoComplete="name-family"
+                                    {...field}
+                                />
+                            )}
+                        />
                         <FormField
                             control={form.control}
                             name="email"
@@ -85,7 +107,21 @@ const SignUp = () => {
                                     label="Password"
                                     placeholder="********"
                                     autoCapitalize="none"
-                                    autoComplete="email"
+                                    autoComplete="password"
+                                    {...field}
+                                    className="pr-16"
+                                />
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="confirmPassword"
+                            render={({ field }) => (
+                                <FormInputPassword
+                                    label="Confirm Password"
+                                    placeholder="********"
+                                    autoCapitalize="none"
+                                    autoComplete="password"
                                     {...field}
                                     className="pr-16"
                                 />

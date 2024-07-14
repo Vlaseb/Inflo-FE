@@ -50,8 +50,8 @@ const SignIn = () => {
     };
 
     return (
-        <SafeAreaView className="h-full bg-background" style={{ flex: 1 }}>
-            <ScrollView className="px-4 pt-16">
+        <SafeAreaView className="bg-background" style={{ flex: 1 }}>
+            <ScrollView contentContainerClassName="px-4 pt-16">
                 <Image
                     source={logoBlue}
                     resizeMode="contain"
@@ -90,7 +90,7 @@ const SignIn = () => {
                                     label="Password"
                                     placeholder="********"
                                     autoCapitalize="none"
-                                    autoComplete="email"
+                                    autoComplete="password"
                                     {...field}
                                     className="pr-16"
                                 />
