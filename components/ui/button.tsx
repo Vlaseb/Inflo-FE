@@ -16,7 +16,7 @@ const buttonVariants = cva(
                     "border border-border bg-background web:hover:bg-accent web:hover:text-accent-foreground active:bg-accent",
                 secondary:
                     "bg-secondary web:hover:opacity-80 active:opacity-80",
-                ghost: "web:hover:bg-accent web:hover:text-accent-foreground active:bg-accent",
+                ghost: "web:hover:bg-accent web:hover:text-accent-foreground",
                 link: "web:underline-offset-4 web:hover:underline web:focus:underline "
             },
             size: {
@@ -71,7 +71,8 @@ const Button = React.forwardRef<
     return (
         <TextClassContext.Provider
             value={cn(
-                props.disabled && "web:pointer-events-none", "font-psemibold",
+                props.disabled && "web:pointer-events-none",
+                "font-psemibold",
                 buttonTextVariants({ variant, size })
             )}
         >

@@ -1,19 +1,16 @@
 import { StatusBar } from "expo-status-bar";
-import { View, Image, Dimensions } from "react-native";
+import { View, Image } from "react-native";
 import { Redirect, router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
-import { images } from "@/constants";
+const logoBlue = require("@/assets/images/fo-blue.png");
+const googleLogo = require("@/assets/icons/google.webp");
 
 export default function App() {
     const { isLoading, isLoggedIn, signInWithGoogle } = useGlobalContext();
-
-    let deviceH = Dimensions.get("screen").height;
-    let windowH = Dimensions.get("window").height;
-    let bottomNavBarH = deviceH - windowH;
 
     if (!isLoading && isLoggedIn) return <Redirect href="/home" />;
 
@@ -22,7 +19,7 @@ export default function App() {
             <View className="flex h-full flex-col items-center justify-end overflow-auto p-4">
                 <View className="relative -top-10 left-12 h-full w-[125vw] rotate-6 bg-secondary">
                     <Image
-                        source={images.fo_blue}
+                        source={logoBlue}
                         className="absolute -left-16 bottom-0 h-[525px] w-[525px] rotate-[-6deg]"
                     />
                 </View>
@@ -33,12 +30,15 @@ export default function App() {
                     <Text className="mb-10 font-psemibold text-4xl text-primary">
                         Save More
                     </Text>
+
                     <Button
                         onPress={signInWithGoogle}
-                        className="mb-4 w-full rounded-full"
+                        className="mb-4 flex w-full flex-row gap-4 rounded-full"
                         size={"lg"}
+                        variant={"outline"}
                     >
-                        <Text className="text-5xl">Google</Text>
+                        <Image source={googleLogo} className="h-12 w-12" />
+                        <Text className="text-5xl">Continue With Google</Text>
                     </Button>
                     <Button
                         onPress={() => router.push("/sign-up")}
