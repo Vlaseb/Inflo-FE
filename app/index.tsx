@@ -2,6 +2,7 @@ import { StatusBar } from "expo-status-bar";
 import { View, Image } from "react-native";
 import { Redirect, router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
+
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
@@ -9,7 +10,7 @@ const logoBlue = require("@/assets/images/fo-blue.png");
 const googleLogo = require("@/assets/icons/google.webp");
 
 export default function App() {
-    const { isLoading, isLoggedIn } = useGlobalContext();
+    const { isLoading, isLoggedIn, signInWithGoogle } = useGlobalContext();
 
     if (!isLoading && isLoggedIn) return <Redirect href="/home" />;
 
@@ -31,7 +32,7 @@ export default function App() {
                     </Text>
 
                     <Button
-                        onPress={() => router.push("/sign-up")}
+                        onPress={signInWithGoogle}
                         className="mb-4 flex w-full flex-row gap-4 rounded-full"
                         size={"lg"}
                         variant={"outline"}

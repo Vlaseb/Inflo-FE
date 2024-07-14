@@ -9,7 +9,7 @@ import { Theme, ThemeProvider } from "@react-navigation/native";
 import { NAV_THEME } from "@/lib/constants";
 
 import GlobalProvider from "@/context/GlobalProvider";
-import { useColorScheme } from "@/hooks/useColorScheme";
+import { useColorScheme } from "@/lib/useColorScheme";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Platform } from "react-native";
 import "@/global.css";
@@ -70,7 +70,7 @@ const RootLayout = () => {
                 setIsColorSchemeLoaded(true);
                 return;
             }
-            const colorTheme = theme === "dark" ? "light" : "dark";
+            const colorTheme = theme === "dark" ? "light" : "light";
             // Astea trebuie invers dar am bug.. xD
             if (colorTheme !== colorScheme) {
                 setColorScheme(colorTheme);

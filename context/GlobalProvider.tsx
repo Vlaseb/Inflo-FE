@@ -7,9 +7,20 @@ import React, {
     SetStateAction,
     ReactNode
 } from "react";
+import * as Google from "expo-auth-session/providers/google";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as WebBrowser from "expo-web-browser";
+import { makeRedirectUri } from "expo-auth-session";
+import { router } from "expo-router";
 
-// Maybe move these into types
-interface User {}
+WebBrowser.maybeCompleteAuthSession();
+
+interface User {
+    id: string;
+    name: string;
+    email: string;
+    picture: string;
+}
 
 interface ContextType {
     isLoggedIn: boolean;
@@ -17,6 +28,8 @@ interface ContextType {
     user: User | null;
     setUser: Dispatch<SetStateAction<User | null>>;
     isLoading: boolean;
+    signInWithGoogle: () => void;
+    signOut: () => void;
 }
 
 const defaultContext: ContextType = {
@@ -24,7 +37,9 @@ const defaultContext: ContextType = {
     setIsLoggedIn: () => {},
     user: null,
     setUser: () => {},
-    isLoading: true
+    isLoading: true,
+    signInWithGoogle: () => {},
+    signOut: () => {}
 };
 
 interface GlobalProviderProps {
@@ -38,6 +53,65 @@ const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
     const [user, setUser] = useState<User | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [request, response, promptAsync] = Google.useAuthRequest({
+        clientId:
+            "1034060721609-huaak2fgq8htl6kgtemod79sn961i2dp.apps.googleusercontent.com",
+        redirectUri: makeRedirectUri({
+            scheme: "com.anonymous.inflo",
+            path: "/home"
+        })
+    });
+
+    useEffect(() => {
+        const checkUser = async () => {
+            const storedUser = await AsyncStorage.getItem("@user");
+            if (storedUser) {
+                setUser(JSON.parse(storedUser));
+                setIsLoggedIn(true);
+                console.log("Google Logged Account:");
+                console.log(storedUser);
+            }
+            setIsLoading(false);
+        };
+
+        checkUser();
+    }, []);
+
+    useEffect(() => {
+        if (response?.type === "success") {
+            getUserInfo(response.authentication?.accessToken);
+        }
+    }, [response]);
+
+    const getUserInfo = async (token: string | null) => {
+        if (!token) return;
+        try {
+            const res = await fetch(
+                "https://www.googleapis.com/userinfo/v2/me",
+                {
+                    headers: { Authorization: `Bearer ${token}` }
+                }
+            );
+            const user = await res.json();
+            await AsyncStorage.setItem("@user", JSON.stringify(user));
+            setUser(user);
+            setIsLoggedIn(true);
+        } catch (error) {
+            console.log("ERROR:", error);
+        }
+    };
+
+    const signInWithGoogle = () => {
+        promptAsync();
+    };
+
+    const signOut = async () => {
+        await AsyncStorage.removeItem("@user");
+        setUser(null);
+        setIsLoggedIn(false);
+
+        router.replace("/");
+    };
 
     // THIS WILL USE FUNCTIONS FROM ./lib
     // useEffect(() => {
@@ -66,7 +140,9 @@ const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
                 setIsLoggedIn,
                 user,
                 setUser,
-                isLoading
+                isLoading,
+                signInWithGoogle,
+                signOut
             }}
         >
             {children}

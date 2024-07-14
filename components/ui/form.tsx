@@ -12,7 +12,7 @@ import {
     Noop,
     useFormContext
 } from "react-hook-form";
-import { View } from "react-native";
+import { Image, TouchableOpacity, View } from "react-native";
 import Animated, { FadeInDown, FadeOut } from "react-native-reanimated";
 
 // import {
@@ -33,6 +33,8 @@ import { RadioGroup } from "../../components/ui/radio-group";
 import { Select, type Option } from "../../components/ui/select";
 import { Switch } from "../../components/ui/switch";
 import { Textarea } from "../../components/ui/textarea";
+const eye = require("@/assets/icons/eye.png");
+const eyeHide = require("@/assets/icons/eye-hide.png");
 
 // import { Calendar as CalendarIcon } from '../../lib/icons/Calendar';
 // import { X } from '../../lib/icons/X';
@@ -256,6 +258,81 @@ const FormInput = React.forwardRef<
 });
 
 FormInput.displayName = "FormInput";
+
+const FormInputPassword = React.forwardRef<
+    React.ElementRef<typeof Input>,
+    FormItemProps<typeof Input, string>
+>(({ label, description, onChange, ...props }, ref) => {
+    const inputRef = React.useRef<React.ComponentRef<typeof Input>>(null);
+    const {
+        error,
+        formItemNativeID,
+        formDescriptionNativeID,
+        formMessageNativeID
+    } = useFormField();
+
+    React.useImperativeHandle(ref, () => {
+        if (!inputRef.current) {
+            return {} as React.ComponentRef<typeof Input>;
+        }
+        return inputRef.current;
+    }, [inputRef.current]);
+
+    function handleOnLabelPress() {
+        if (!inputRef.current) {
+            return;
+        }
+        if (inputRef.current.isFocused()) {
+            inputRef.current?.blur();
+        } else {
+            inputRef.current?.focus();
+        }
+    }
+
+    const [isVisible, setIsVisible] = React.useState(false);
+
+    return (
+        <FormItem>
+            {!!label && (
+                <FormLabel
+                    nativeID={formItemNativeID}
+                    onPress={handleOnLabelPress}
+                >
+                    {label}
+                </FormLabel>
+            )}
+            <View className="relative">
+                <Input
+                    ref={inputRef}
+                    aria-labelledby={formItemNativeID}
+                    aria-describedby={
+                        !error
+                            ? `${formDescriptionNativeID}`
+                            : `${formDescriptionNativeID} ${formMessageNativeID}`
+                    }
+                    aria-invalid={!!error}
+                    onChangeText={onChange}
+                    secureTextEntry={!isVisible}
+                    {...props}
+                />
+                <TouchableOpacity
+                    className="absolute right-2 top-1"
+                    onPress={() => setIsVisible(!isVisible)}
+                >
+                    <Image
+                        source={isVisible ? eye : eyeHide}
+                        className="h-10 w-10"
+                    />
+                </TouchableOpacity>
+            </View>
+
+            {!!description && <FormDescription>{description}</FormDescription>}
+            <FormMessage />
+        </FormItem>
+    );
+});
+
+FormInputPassword.displayName = "FormInputPassword";
 
 const FormTextarea = React.forwardRef<
     React.ElementRef<typeof Textarea>,
@@ -690,6 +767,7 @@ export {
     // FormDatePicker,
     FormDescription,
     FormField,
+    FormInputPassword,
     FormInput,
     FormItem,
     FormLabel,
