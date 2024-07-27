@@ -24,6 +24,7 @@ import { Loader } from "@/components/Loader";
 import { ErrorAlert } from "@/components/ErrorAlert";
 const logoBlue = require("@/assets/images/fo-blue.png");
 import { useGlobalContext } from "@/context/GlobalProvider";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const SignIn = () => {
     const { setUser, setIsLoggedIn } = useGlobalContext();
@@ -44,6 +45,8 @@ const SignIn = () => {
             setError(data.error);
             return setTimeout(() => setError(null), 10000);
         }
+
+        await AsyncStorage.setItem("@user", JSON.stringify(data));
         setUser(data);
         setIsLoggedIn(true);
         router.replace("/home");

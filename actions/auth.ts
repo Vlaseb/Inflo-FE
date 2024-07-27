@@ -47,3 +47,28 @@ export const signUp = async (body: signUpParams) => {
         return checkError(error);
     }
 };
+
+type User = {
+    id: string;
+    name: string;
+    email: string;
+    picture: string;
+};
+
+export const googleSignIn = async (body: User) => {
+    const { name, email, id: google_id } = body;
+    try {
+        const response = await fetch(`${BASE_URL}/auth/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name, email, google_id })
+        });
+        if (!response.ok) {
+            const errMsg = await response.json();
+            throw new Error(errMsg.detail);
+        }
+        return await response.json();
+    } catch (error) {
+        return checkError(error);
+    }
+};
