@@ -1,6 +1,5 @@
 import { View, Text } from "react-native";
 import React from "react";
-import { router } from "expo-router";
 
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { Button } from "@/components/ui/button";
@@ -18,7 +17,7 @@ const Home = () => {
                 className="mb-4 w-full rounded-full bg-white"
                 size={"lg"}
             >
-                <Text className="">delete local storage</Text>
+                <Text>delete local storage</Text>
             </Button>
         </View>
     );

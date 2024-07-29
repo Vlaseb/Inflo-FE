@@ -109,6 +109,12 @@ const RootLayout = () => {
                                 name="(tabs)"
                                 options={{ headerShown: false }}
                             />
+                            <Stack.Screen
+                                name="(modals)"
+                                options={{
+                                    headerShown: false
+                                }}
+                            />
                         </Stack>
                     </GestureHandlerRootView>
                 </ThemeProvider>

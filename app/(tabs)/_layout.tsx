@@ -1,20 +1,27 @@
-import { StatusBar } from 'expo-status-bar';
-import { View, Text, Image } from 'react-native';
-import { Tabs } from 'expo-router';
+import { StatusBar } from "expo-status-bar";
+import { View, Text, Image } from "react-native";
+import { Tabs } from "expo-router";
 
-import { icons } from '@/constants';
+import { icons } from "@/constants";
 
-const TabIcon = ({ icon, color, name, focused }) => {
+type TabIconParams = {
+    icon: string;
+    color: string;
+    name: string;
+    focused: boolean;
+};
+
+const TabIcon = ({ icon, color, name, focused }: TabIconParams) => {
     return (
         <View className="items-center justify-center gap-2">
             <Image
                 source={icon}
                 resizeMode="contain"
                 tintColor={color}
-                className="w-6 h-6"
+                className="h-6 w-6"
             />
             <Text
-                className={`${focused ? 'font-psemibold' : 'font-pregular'} text-xs`}
+                className={`${focused ? "font-psemibold" : "font-pregular"} text-xs`}
                 style={{ color: color }}
             >
                 {name}
@@ -29,10 +36,10 @@ const TabsLayout = () => {
             <Tabs
                 screenOptions={{
                     tabBarShowLabel: false,
-                    tabBarActiveTintColor: '#0088ff',
-                    tabBarInactiveTintColor: '#CDCDE0',
+                    tabBarActiveTintColor: "#0088ff",
+                    tabBarInactiveTintColor: "#CDCDE0",
                     tabBarStyle: {
-                        backgroundColor: '#FFF',
+                        backgroundColor: "#FFF",
                         borderTopWidth: 1,
                         height: 100
                     }
@@ -41,7 +48,7 @@ const TabsLayout = () => {
                 <Tabs.Screen
                     name="home"
                     options={{
-                        title: 'Home',
+                        title: "Home",
                         headerShown: false,
                         tabBarIcon: ({ color, focused }) => (
                             <TabIcon
@@ -56,7 +63,7 @@ const TabsLayout = () => {
                 <Tabs.Screen
                     name="profile"
                     options={{
-                        title: 'Profile',
+                        title: "Profile",
                         headerShown: false,
                         tabBarIcon: ({ color, focused }) => (
                             <TabIcon

@@ -12,6 +12,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as WebBrowser from "expo-web-browser";
 import { makeRedirectUri } from "expo-auth-session";
 import { router } from "expo-router";
+import { googleSignIn } from "@/actions/auth";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -21,12 +22,21 @@ interface User {
     email: string;
     picture: string;
 }
+interface ConnectedUser {
+    id: string;
+    first_name: string;
+    last_name: string;
+    email: string;
+    access_token: string;
+    refresh_token: string;
+    access_token_expires_in: number;
+}
 
 interface ContextType {
     isLoggedIn: boolean;
     setIsLoggedIn: Dispatch<SetStateAction<boolean>>;
-    user: User | null;
-    setUser: Dispatch<SetStateAction<User | null>>;
+    user: ConnectedUser | null;
+    setUser: Dispatch<SetStateAction<ConnectedUser | null>>;
     isLoading: boolean;
     signInWithGoogle: () => void;
     signOut: () => void;
@@ -51,7 +61,7 @@ export const useGlobalContext = () => useContext(GlobalContext);
 
 const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-    const [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<ConnectedUser | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [request, response, promptAsync] = Google.useAuthRequest({
         clientId:
@@ -93,8 +103,11 @@ const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
                 }
             );
             const user = await res.json();
-            await AsyncStorage.setItem("@user", JSON.stringify(user));
-            setUser(user);
+
+            const dbUser = await googleSignIn(user);
+            await AsyncStorage.setItem("@user", JSON.stringify(dbUser));
+
+            setUser(dbUser);
             setIsLoggedIn(true);
         } catch (error) {
             console.log("ERROR:", error);

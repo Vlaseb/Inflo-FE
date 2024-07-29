@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import { View, Image } from "react-native";
-import { Redirect, router } from "expo-router";
+import { Link, Redirect, router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { useGlobalContext } from "@/context/GlobalProvider";
@@ -24,9 +24,14 @@ export default function App() {
                     />
                 </View>
                 <View className="w-full items-center">
-                    <Text className="font-psemibold text-4xl text-primary">
-                        Spend Smarter
-                    </Text>
+                    {/* ! Murim Chat Testing pt Home Screen */}
+                    <Link href={"/(tabs)/home"}>
+                        <Text className="font-psemibold text-4xl text-primary">
+                            Spend Smarter
+                        </Text>
+                    </Link>
+                    {/* ! Murim Chat Testing pt Home Screen */}
+
                     <Text className="mb-10 font-psemibold text-4xl text-primary">
                         Save More
                     </Text>

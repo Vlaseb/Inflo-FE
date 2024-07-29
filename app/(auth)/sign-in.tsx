@@ -24,6 +24,7 @@ import { Loader } from "@/components/Loader";
 import { ErrorAlert } from "@/components/ErrorAlert";
 const logoBlue = require("@/assets/images/fo-blue.png");
 import { useGlobalContext } from "@/context/GlobalProvider";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const SignIn = () => {
     const { setUser, setIsLoggedIn } = useGlobalContext();
@@ -44,14 +45,16 @@ const SignIn = () => {
             setError(data.error);
             return setTimeout(() => setError(null), 10000);
         }
+
+        await AsyncStorage.setItem("@user", JSON.stringify(data));
         setUser(data);
         setIsLoggedIn(true);
         router.replace("/home");
     };
 
     return (
-        <SafeAreaView className="h-full bg-background" style={{ flex: 1 }}>
-            <ScrollView className="px-4 pt-16">
+        <SafeAreaView className="bg-background" style={{ flex: 1 }}>
+            <ScrollView contentContainerClassName="px-4 pt-16">
                 <Image
                     source={logoBlue}
                     resizeMode="contain"
@@ -90,7 +93,7 @@ const SignIn = () => {
                                     label="Password"
                                     placeholder="********"
                                     autoCapitalize="none"
-                                    autoComplete="email"
+                                    autoComplete="password"
                                     {...field}
                                     className="pr-16"
                                 />
