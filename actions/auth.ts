@@ -72,3 +72,22 @@ export const googleSignIn = async (body: User) => {
         return checkError(error);
     }
 };
+
+export const updateToken = async (refresh_token?: string) => {
+    if (refresh_token === undefined) return null;
+    try {
+        const response = await fetch(`${BASE_URL}/auth/refresh_token`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ refresh_token })
+        });
+        if (!response.ok) {
+            const errMsg = await response.json();
+            throw new Error(errMsg.detail);
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        return checkError(error);
+    }
+};
