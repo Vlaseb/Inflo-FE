@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { View, Image } from "react-native";
 import React from "react";
 
 import { useGlobalContext } from "@/context/GlobalProvider";
@@ -8,17 +8,50 @@ import { CustomHeader } from "@/components/Header";
 import { Text } from "@/components/ui/text";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Entypo from "@expo/vector-icons/Entypo";
+import { Ionicons } from "@expo/vector-icons";
+const bg = require("@/assets/images/bg.png");
+const foW = require("@/assets/images/fo-w.png");
 
 const Home = () => {
-    const { signOut } = useGlobalContext();
+    const { signOut, user } = useGlobalContext();
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <CustomHeader title="" />
+            <View className="h-[42%] p-6">
+                <Image
+                    source={bg}
+                    className="absolute bottom-0 h-[125%] w-screen"
+                />
+                <Image
+                    source={foW}
+                    className="absolute -left-4 -top-4 h-[250px] w-[250px] object-contain opacity-20"
+                />
+
+                <View className="flex flex-row items-center justify-between pt-[10%]">
+                    <View>
+                        <Text className="font-pmedium text-xl text-primary-foreground">
+                            Good to see you,
+                        </Text>
+                        <Text className="font-psemibold text-2xl text-primary-foreground">
+                            {user
+                                ? `${user.first_name}, ${user.last_name}`
+                                : "Enjelin Morgeana"}
+                        </Text>
+                    </View>
+
+                    <Button variant={"ghost"}>
+                        <Ionicons
+                            name="notifications-outline"
+                            size={32}
+                            color="white"
+                        />
+                    </Button>
+                </View>
+            </View>
             {/* <Text>Hello,</Text>
             <Text>Enjelin Morgeana</Text> */}
-            <View className="px-6">
-                <View className="absolute bottom-0 flex w-full justify-center rounded-2xl bg-primary p-6">
+            <View className="relative bottom-[15%] px-6">
+                <View className="flex w-full justify-center rounded-2xl bg-primary p-6">
                     <View className="flex flex-row items-center justify-between">
                         <View className="flex-row items-center gap-1">
                             <Text className="font-pmedium text-xl text-primary-foreground">
@@ -80,8 +113,6 @@ const Home = () => {
                         </View>
                     </View>
                 </View>
-            </View>
-            <View className="px-6 py-2">
                 <View className="flex flex-row items-center justify-between">
                     <Text className="font-psemibold">Transactions History</Text>
                     <Button variant={"ghost"}>
@@ -89,7 +120,6 @@ const Home = () => {
                     </Button>
                 </View>
             </View>
-
             {/* <Button
                 onPress={() => {
                     signOut();
