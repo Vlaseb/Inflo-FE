@@ -67,16 +67,14 @@ const RootLayout = () => {
             }
             if (!theme) {
                 AsyncStorage.setItem("theme", colorScheme);
-                setIsColorSchemeLoaded(true);
-                return;
+                return setIsColorSchemeLoaded(true);
             }
             const colorTheme = theme === "dark" ? "light" : "light";
             // Astea trebuie invers dar am bug.. xD
             if (colorTheme !== colorScheme) {
                 setColorScheme(colorTheme);
 
-                setIsColorSchemeLoaded(true);
-                return;
+                return setIsColorSchemeLoaded(true);
             }
             setIsColorSchemeLoaded(true);
         })().finally(() => {
@@ -111,9 +109,7 @@ const RootLayout = () => {
                             />
                             <Stack.Screen
                                 name="(modals)"
-                                options={{
-                                    headerShown: false
-                                }}
+                                options={{ headerShown: false }}
                             />
                         </Stack>
                     </GestureHandlerRootView>

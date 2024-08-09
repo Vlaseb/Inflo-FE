@@ -15,22 +15,21 @@ export default function App() {
     if (!isLoading && isLoggedIn) return <Redirect href="/home" />;
 
     return (
-        <SafeAreaView className="flex-1 bg-background">
-            <View className="flex h-full flex-col items-center justify-end overflow-auto p-4">
-                <View className="relative -top-10 left-12 h-full w-[125vw] rotate-6 bg-secondary">
+        <SafeAreaView style={{ flex: 1 }}>
+            <View className="flex h-full flex-col items-center justify-end bg-background p-4">
+                <View className="relative -top-10 h-full w-[125vw] rotate-6 overflow-hidden bg-secondary">
                     <Image
                         source={logoBlue}
-                        className="absolute -left-16 bottom-0 h-[525px] w-[525px] rotate-[-6deg]"
+                        resizeMode="contain"
+                        className="absolute -bottom-10 -left-6 h-[75%] w-full -rotate-[6deg]"
                     />
                 </View>
                 <View className="w-full items-center">
-                    {/* ! Murim Chat Testing pt Home Screen */}
                     <Link href={"/(tabs)/home"}>
                         <Text className="font-psemibold text-4xl text-primary">
                             Spend Smarter
                         </Text>
                     </Link>
-                    {/* ! Murim Chat Testing pt Home Screen */}
 
                     <Text className="mb-10 font-psemibold text-4xl text-primary">
                         Save More

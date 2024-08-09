@@ -12,7 +12,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as WebBrowser from "expo-web-browser";
 import { makeRedirectUri } from "expo-auth-session";
 import { router } from "expo-router";
-import { googleSignIn } from "@/actions/auth";
+import { googleSignIn, signIn, updateToken } from "@/actions/auth";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -93,8 +93,8 @@ const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
         }
     }, [response]);
 
-    const getUserInfo = async (token: string | null) => {
-        if (!token) return;
+    const getUserInfo = async (token?: string) => {
+        if (token === undefined) return;
         try {
             const res = await fetch(
                 "https://www.googleapis.com/userinfo/v2/me",
@@ -117,6 +117,28 @@ const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
     const signInWithGoogle = () => {
         promptAsync();
     };
+
+    const update = async () => {
+        const data = await updateToken(user?.refresh_token);
+        if (data.error) return signOut();
+        setUser((prev) => {
+            return { ...prev, access_token: data.access_token };
+        });
+        await AsyncStorage.setItem("@user", JSON.stringify(user));
+    };
+
+    useEffect(() => {
+        if (isLoading) {
+            update();
+        }
+        const fourMinutes = 1000 * 60 * 4; // access_token_expiry
+        const interval = setInterval(() => {
+            if (user) {
+                update();
+            }
+        }, fourMinutes);
+        return () => clearInterval(interval);
+    }, []);
 
     const signOut = async () => {
         await AsyncStorage.removeItem("@user");
